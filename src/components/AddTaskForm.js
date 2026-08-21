@@ -1,9 +1,23 @@
 import * as db from '@/services/db.js';
 import { Button, Form } from "react-bootstrap";
+import { useRef } from "react";
 
 export default function AddTaskForm({
     newIcon, setNewIcon, newTitle, setNewTitle, newReset, setNewReset, newBound, setNewBound, handleAddTask
 }) {
+    const fileInputRef = useRef(null);
+
+    const handleFileSelect = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setNewIcon(file.name);
+        }
+    };
+
+    const handleButtonClick = () => {
+        fileInputRef.current.click();
+    };
+
     return (
         <table className='text-center box'>
             <tbody>
@@ -18,16 +32,17 @@ export default function AddTaskForm({
                         />
                     </td>
                     <td className='text-center align-middle'>
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            onChange={handleFileSelect}
+                            style={{display: 'none'}}
+                            accept="image/*"
+                        />
                         <button
                             className="button-confirm"
                             size="sm"
-                            onClick={async () => {
-                                const filePath = await db.selectIcon();
-                                if (filePath) {
-                                    const file = filePath.split('\\').pop().split('/').pop();
-                                    setNewIcon(file);
-                                }
-                            }}
+                            onClick={handleButtonClick}
                         >
                             Select file
                         </button>

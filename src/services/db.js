@@ -15,26 +15,26 @@ export const initDB = async () => {
     let tasks = storage.get('tasks');
     if (tasks.length === 0) {
         const defaultTasks = [
-            { id: 1, title: 'Battle Pass Daily', reset: 'daily', bound: 'account', icon: 'battlepass.png' },
-            { id: 2, title: 'Serpentium Daily', reset: 'daily', bound: 'account', icon: 'serpdaily.png' },
-            { id: 3, title: 'Heroic Dungeon', reset: 'daily', bound: 'character', icon: 'heroic.png' },
-            { id: 4, title: 'Aqua Whistle', reset: 'daily', bound: 'character', icon: 'aquawhistle.png' },
-            { id: 5, title: 'ED Weekly Mission', reset: 'weekly', bound: 'account', icon: 'ed.webp' },
-            { id: 6, title: 'Battle Pass Weekly', reset: 'weekly', bound: 'account', icon: 'battlepass.png' },
-            { id: 7, title: 'Enhancement Quest', reset: 'weekly', bound: 'account', icon: 'enhancement.png' },
-            { id: 8, title: 'Secret Dungeon', reset: 'weekly', bound: 'account', icon: 'secretdungeon.png' },
-            { id: 9, title: 'Blacksmith Craft', reset: 'weekly', bound: 'account', icon: 'blacksmith.png' },
-            { id: 10, title: 'Dragon Lens Craft', reset: 'weekly', bound: 'account', icon: 'lenscraft.png' },
-            { id: 11, title: 'Serpentium Weekly', reset: 'weekly', bound: 'account', icon: 'serpweekly.png' },
-            { id: 12, title: 'Henir', reset: 'weekly', bound: 'character', icon: 'henir.png' },
-            { id: 13, title: 'Abyss', reset: 'weekly', bound: 'character', icon: 'abyss.png' },
-            { id: 14, title: 'Serpentium', reset: 'weekly', bound: 'character', icon: 'serpentiumraid.png' },
-            { id: 15, title: 'Doom Aporia', reset: 'weekly', bound: 'character', icon: 'doom.png' },
-            { id: 16, title: 'Challenge Mode', reset: 'weekly', bound: 'character', icon: '' },
-            { id: 17, title: "x10 Spirit Lord's Temple", reset: 'weekly', bound: 'character', icon: 'atma.png' },
-            { id: 18, title: 'Mirror Del', reset: 'weekly', bound: 'character', icon: 'mirrordel.png' },
-            { id: 19, title: 'Devil of Chaos', reset: 'weekly', bound: 'character', icon: 'devilofchaos.png' },
-            { id: 20, title: 'High Entropy', reset: 'weekly', bound: 'character', icon: 'highentropy.png' }
+            { id: 1, title: 'Battle Pass Daily', reset: 'daily', bound: 'account', icon: 'battlepass.png', system: 1 },
+            { id: 2, title: 'Serpentium Daily', reset: 'daily', bound: 'account', icon: 'serpdaily.png', system: 1 },
+            { id: 3, title: 'Heroic Dungeon', reset: 'daily', bound: 'character', icon: 'heroic.png', system: 1 },
+            { id: 4, title: 'Aqua Whistle', reset: 'daily', bound: 'character', icon: 'aquawhistle.png', system: 1 },
+            { id: 5, title: 'ED Weekly Mission', reset: 'weekly', bound: 'account', icon: 'ed.webp', system: 1 },
+            { id: 6, title: 'Battle Pass Weekly', reset: 'weekly', bound: 'account', icon: 'battlepass.png', system: 1 },
+            { id: 7, title: 'Enhancement Quest', reset: 'weekly', bound: 'account', icon: 'enhancement.png', system: 1 },
+            { id: 8, title: 'Secret Dungeon', reset: 'weekly', bound: 'account', icon: 'secretdungeon.png', system: 1 },
+            { id: 9, title: 'Blacksmith Craft', reset: 'weekly', bound: 'account', icon: 'blacksmith.png', system: 1 },
+            { id: 10, title: 'Dragon Lens Craft', reset: 'weekly', bound: 'account', icon: 'lenscraft.png', system: 1 },
+            { id: 11, title: 'Serpentium Weekly', reset: 'weekly', bound: 'account', icon: 'serpweekly.png', system: 1 },
+            { id: 12, title: 'Henir', reset: 'weekly', bound: 'character', icon: 'henir.png', system: 1 },
+            { id: 13, title: 'Abyss', reset: 'weekly', bound: 'character', icon: 'abyss.png', system: 1 },
+            { id: 14, title: 'Serpentium', reset: 'weekly', bound: 'character', icon: 'serpentiumraid.png', system: 1 },
+            { id: 15, title: 'Doom Aporia', reset: 'weekly', bound: 'character', icon: 'doom.png', system: 1 },
+            { id: 16, title: 'Challenge Mode', reset: 'weekly', bound: 'character', icon: '', system: 1 },
+            { id: 17, title: "x10 Spirit Lord's Temple", reset: 'weekly', bound: 'character', icon: 'atma.png', system: 1 },
+            { id: 18, title: 'Mirror Del', reset: 'weekly', bound: 'character', icon: 'mirrordel.png', system: 1 },
+            { id: 19, title: 'Devil of Chaos', reset: 'weekly', bound: 'character', icon: 'devilofchaos.png', system: 1 },
+            { id: 20, title: 'High Entropy', reset: 'weekly', bound: 'character', icon: 'highentropy.png', system: 1 }
         ];
         storage.set('tasks', defaultTasks);
     }
@@ -271,5 +271,18 @@ export const useResetTicket = async (characterId) => {
 };
 
 export const selectIcon = async () => null;
+
+export const saveIcon = async (taskId, iconData) => {
+    const icons = JSON.parse(localStorage.getItem('taskIcons') || '{}');
+    icons[taskId] = iconData;
+    localStorage.setItem('taskIcons', JSON.stringify(icons));
+    return icons[taskId];
+};
+
+export const getIcon = async (taskId) => {
+    const icons = JSON.parse(localStorage.getItem('taskIcons') || '{}');
+    return icons[taskId] || null;
+};
+
 export const getIconPath = async () => null;
 export const sendDiscordMsg = async () => {};
