@@ -1,0 +1,362 @@
+@import 'mixins';
+
+// * General ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#body {
+    background: radial-gradient(circle at 30% 40%, #0a0a0a 0%, transparent 80%),
+        radial-gradient(circle at 70% 100%, var(--accent) 0%, transparent 60%),
+        #1a1a1a;
+    background-attachment: fixed;
+    font-family: 'DM Sans', sans-serif !important;
+}
+
+h1, h2, h4, .h4, .h2 {
+    color: var(--glow) !important;
+    text-shadow: 0 0 10px var(--accent);
+}
+
+#notepad {
+    background: linear-gradient(180deg, #0a0a0a, #1a1a1a);
+    backdrop-filter: blur(12.5px);
+    border-radius: 20px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+    border: solid 1px var(--accent);
+    border-radius: 20px;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1.5em;
+    
+    &::placeholder {
+        color: var(--accent);
+    }
+}
+
+svg {
+    height: 28px;
+    width: 28px;
+
+    &.bi-pencil, &.bi-trash {
+        height: 22px;
+        width: 22px;
+    }
+    
+    &.bi-x {
+        color: #ff0000;
+        filter: drop-shadow(0 0 8px #ff4444cc);
+        
+        &:hover {
+            transition: 0.3s ease-in-out;
+            filter: drop-shadow(0 0 16px #ff4444cc) drop-shadow(0 0 32px #ff4444cc);
+        }
+    }
+    
+    &.bi-check {
+        color: #00d800;
+        filter: drop-shadow(0 0 8px #70ff44cc);
+        
+        &:hover {
+            transition: 0.3s ease-in-out;
+            filter: drop-shadow(0 0 16px #70ff44cc) drop-shadow(0 0 32px #70ff44cc);
+        }
+    }
+}
+
+.scroll-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+
+    &::-webkit-scrollbar {
+        height: .75rem;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #00000086;
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: var(--accent-soft);
+        border-radius: 10px;
+    }
+}
+
+.clock-digits {
+    font-family: monospace;
+    font-variant-numeric: tabular-nums;
+}
+
+.box {
+    background: linear-gradient(320deg, #0a0a0a, #1a1a1a);
+    border: solid 1px var(--accent);
+    border-radius: 20px;
+    padding: 1.5rem;
+    color: #ffffff;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+
+    th, td {
+        padding: 0.625rem 1rem;
+    }
+
+    th {
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 1.1em;
+        border-bottom: 2px solid var(--accent-soft) !important;
+    }
+
+    td {
+        color: #ffffff;
+        border-bottom: 2px solid var(--accent-soft) !important;
+    }
+
+    tr {
+        &:last-child td {
+            border-bottom: none !important;
+        }
+        &:hover td {
+            background-color: var(--accent-soft) !important;
+        }
+    }
+}
+
+
+// ? Form stuff ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+input.form-control, select.form-select, button.form-dropdown {
+    appearance: auto;
+    background: #202020;
+    backdrop-filter: blur(40px);
+    border: solid 1px var(--accent);
+    border-radius: 20px;
+    color: #ffffff !important;
+    padding: .375rem .75rem;
+
+    &::placeholder {
+        color: #ffffff !important;
+    }
+
+    &:focus {
+        background-color: #202020 !important;
+    }
+
+    option {
+        color: #ffffff;
+        
+    }
+}
+
+button.dropdown-toggle {
+    background: transparent;
+    border-color: var(--accent);
+    color: white;
+    transition: 0.2s ease-in-out;
+
+    &:hover {
+        background: transparent;
+        border-color: var(--glow);
+    }
+}
+
+@mixin btn-custom($bg, $color, $hover-bg, $hover-color, $glow) {
+    background: $bg !important;
+    color: $color !important;
+    border: 1px solid transparent;
+    transition: ease-in-out 0.3 ease;
+
+    &:hover {
+        background: $hover-bg;
+        color: $hover-color;
+        box-shadow: 
+            0 0 1.25rem $glow,
+            inset 0 0 1.25rem $glow;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+}
+
+@mixin btn-yeah {
+    padding: .375rem .75rem;
+    color: #ffffff;
+    font-weight: bold;
+    box-shadow: 0px 0px 4px var(--glow);
+    border: solid 2px transparent;
+    border-radius: 20px;
+    background: transparent;
+    transition: all 0.4s ease-in-out;
+
+    &:hover {
+        color: #ffffff;
+        background-color: var(--accent);
+        box-shadow: 
+            0 0 1.25rem var(--glow),
+            inset 0 0 1.25rem var(--glow);
+        border-color: var(--glow);
+
+    }
+
+    &:disabled {
+        border-color: var(--accent);
+        opacity: 0.5;
+        pointer-events: none;
+    }
+}
+button.btn-outline-light {
+    // @include btn-custom(var(--theme-button), var(--theme-text), var(--theme-hover), var(--theme-secondary), var(--theme-glow));
+    @include btn-yeah();
+}
+
+.dropdown-item {
+    color: #FFFFFF !important;
+    &:hover {
+        color: var(--accent) !important;
+    }
+    transition: 0.3s ease-in-out;
+}
+
+.dropdown-item.disabled {
+    color: #FFFFFF80 !important;
+}
+
+button.form-dropdown {
+    padding: .375rem .75rem;
+}
+
+.button-confirm {
+    @include btn-yeah();
+    background: var(--accent)
+}
+
+// * Checklist ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.character-row {
+    border-radius: 20px;
+    outline-offset: -2px;
+
+    td {
+        background-color: inherit !important;
+        padding: .5rem;
+        border-bottom: none !important;
+
+        &.cell-disabled {
+            background-color: slategrey !important;
+        }
+
+        &:first-child {
+            border-radius: 20px 0 0 20px;
+        }
+
+        &:last-child {
+            border-radius: 0 20px 20px 0;
+        }
+    }
+
+    // TODO sticky when scrolling
+
+    input.form-control {
+        // background-color: #202020 !important;
+        border-color: var(--accent);
+        // color: #ffffff !important;
+
+        // &::placeholder {
+        //     color: #ffffff;
+        // }
+
+        &:focus, &:focus-visible {
+            // background-color: #202020 !important;
+            // color: var(--accent);
+        }
+    }
+}
+
+// * Characters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+//          ? Character Dropdown
+.dropdown-menu {
+    &.show {
+        background: linear-gradient(180deg, #0a0a0a, #1a1a1a);
+        backdrop-filter: blur(12.5px);
+        border-radius: 20px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+        border: solid 1px var(--accent);
+        border-radius: 20px;
+    }
+}
+
+.dropdown-item {
+    background-color: transparent !important;
+    &:hover {
+        background-color: transparent !important;
+        img {
+            filter: drop-shadow(0 0 15px var(--glow)) !important;
+        }
+    }
+
+    &:active,
+    &:focus {
+        background-color: transparent !important;
+    }
+
+}
+
+// * Challenge ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+// * Pity Tracker ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.pity-wrapper {
+    background: linear-gradient(93.71deg, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.23) 100%);
+    backdrop-filter: blur(40px);
+    border-radius: 12px;
+    border: 1px solid #ffffff40;
+    height: 24px;
+    position: relative;
+    overflow: hidden;
+    flex: 1;
+
+    .pity-bar {
+        height: 100%;
+        border-radius: 6px;
+        transition: width 0.3s ease;
+    }
+
+    .pity-text {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        text-shadow: 1px 1px 2px #000000cc;
+    }
+}
+
+// * Add character/task forms ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+// * Settings ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+// ? ----------------------------------------------------------------
+
+@media (max-width: 768px) {
+    .row {
+        flex-direction: column;
+    }
+
+    .col-notepad {
+        margin-bottom: 2rem;
+    }
+}
