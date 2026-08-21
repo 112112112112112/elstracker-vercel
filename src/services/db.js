@@ -4,6 +4,14 @@ const storage = {
 };
 
 export const initDB = async () => {
+    if (!localStorage.getItem('characterCounter')) {
+        const chars = storage.get('characters');
+        const maxId = chars.reduce((max, c) => Math.max(max, c.id || 0), 0);
+        const startFrom = Math.max(maxId + 1, 1);
+        localStorage.setItem('characterCounter', JSON.stringify(startFrom));
+        console.log('✅ characterCounter initialized at:', startFrom);
+    }
+
     let tasks = storage.get('tasks');
     if (tasks.length === 0) {
         const defaultTasks = [
@@ -118,10 +126,17 @@ export const toggleTaskEnabled = async (characterId, taskId, enabled) => {
     storage.set('checklist', updated);
 };
 
+const getNextId = () => {
+    const counter = JSON.parse(localStorage.getItem('characterCounter') || '1');
+    const newId = counter;
+    localStorage.setItem('characterCounter', JSON.stringify(counter + 1));
+    return newId;
+};
+
 export const addCharacter = async (charName, charClass, color) => {
     const chars = storage.get('characters');
-    const maxId = chars.reduce((max, c) => Math.max(max, c.id || 0), 0);
-    const newId = maxId + 1;
+    // const maxId = chars.reduce((max, c) => Math.max(max, c.id || 0), 0);
+    const newId = getNextId();
     chars.push({ id: newId, name: charName, class: charClass, color: color || '#8b5cf6' });
     storage.set('characters', chars);
 
@@ -203,7 +218,7 @@ export const updateAura = async (characterId, dungeon, amount) => {
     if (!data.characters[characterId]) {
         data.characters[characterId] = { rossoAura: 0, bertheAura: 0, resetTicketUsed: 0 };
     }
-    
+
     if (dungeon === 'Rosso') {
         data.characters[characterId].rossoAura += amount;
     } else {

@@ -51,7 +51,3 @@ src/js/Home.js
 android/
 ios/
 bot.js
-.vercel
-
-# Local Netlify folder
-.netlify
