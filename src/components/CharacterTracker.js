@@ -24,12 +24,21 @@ export default function CharacterTracker({ characters, tasks, checklist, toggleT
                             if (t.title === 'Challenge Mode' && currentWeek) {
                                 icon = currentWeek === 'Rosso' ? '/img/tasks/rosso.webp' : '/img/tasks/berthe.webp';
                             }
+
+                            const isUserTask = t.system === 0;
+                            
                             return (
                             <th key={t.id}>
-                                {(viewMode === 'both' || viewMode === 'icons') && icon && (
-                                    <img src={icon} style={{ maxWidth: '80px', maxHeight: '80px'}} />
+                                {isUserTask ? (
+                                    t.title
+                                ) : (
+                                    <>
+                                        {(viewMode === 'both' || viewMode === 'icons') && icon && (
+                                            <img src={icon} style={{ maxWidth: '80px', maxHeight: '80px' }} />
+                                        )}
+                                        {(viewMode === 'both' || viewMode === 'titles') && t.title}
+                                    </>
                                 )}
-                                {(viewMode === 'both' || viewMode === 'titles') && t.title}
                                 </th>
                             )
                         })}

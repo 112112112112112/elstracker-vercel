@@ -102,6 +102,10 @@ export const getPity = async (characterId, taskId) => {
     return pity[key] !== undefined ? { percent: pity[key] } : null;
 };
 
+const getResetData = () => {
+    return JSON.parse(localStorage.getItem('resetData') || '{"lastDailyReset":null,"lastWeeklyReset":null}');
+};
+
 export const loadNotes = async () => {
     return localStorage.getItem('notes') || '';
 };
@@ -167,15 +171,52 @@ export const deleteCharacter = async (characterId) => {
 export const addTask = async (icon, title, reset, bound) => {
     const tasks = storage.get('tasks');
     const maxId = tasks.reduce((max, t) => Math.max(max, t.id || 0), 0);
+    const newTaskId = maxId + 1;
+
     tasks.push({ id: maxId + 1, title, reset, bound, icon: icon || null, system: 0 });
     storage.set('tasks', tasks);
+
+    const checklist = storage.get('checklist');
+    const characters = storage.get('characters');
+
+    if (bound === 'account') {
+        checklist.push({ 
+            id: Date.now(), 
+            character_id: 0, 
+            task_id: newTaskId, 
+            completed: 0, 
+            enabled: 1 
+        });
+    } else {
+        const characterIds = characters.filter(c => c.id !== 0).map(c => c.id);
+        for (const characterId of characterIds) {
+            checklist.push({ 
+                id: Date.now() + characterId, 
+                character_id: characterId, 
+                task_id: newTaskId, 
+                completed: 0, 
+                enabled: 1 
+            });
+        }
+    }
+    
+    storage.set('checklist', checklist);
 };
 
 export const deleteTask = async (taskId) => {
-    const tasks = storage.get('tasks').filter(t => t.id !== taskId);
-    storage.set('tasks', tasks);
+    const tasks = storage.get('tasks');
+    const task = tasks.find(t => t.id === taskId);
+    
+    if (task && task.system === 1) {
+        return { error: 'Cannot delete default tasks' };
+    }
+    
+    const updatedTasks = tasks.filter(t => t.id !== taskId);
+    storage.set('tasks', updatedTasks);
+    
     const checklist = storage.get('checklist').filter(c => c.task_id !== taskId);
     storage.set('checklist', checklist);
+    return { success: true };
 };
 
 export const addRun = async (characterId, taskId, type) => {
@@ -268,6 +309,86 @@ export const useResetTicket = async (characterId) => {
     data.characters[characterId].resetTicketUsed = (data.characters[characterId].resetTicketUsed || 0) + 1;
     localStorage.setItem('challengeData', JSON.stringify(data));
     return data.characters[characterId];
+};
+
+const saveResetData = (data) => {
+    localStorage.setItem('resetData', JSON.stringify(data));
+};
+
+export const resetTasks = async () => {
+    const now = new Date();
+    const resetData = getResetData();
+    const lastDaily = resetData.lastDailyReset ? new Date(resetData.lastDailyReset) : null;
+    let needsReset = false;
+
+    const dailyResetTime = new Date(now);
+    dailyResetTime.setUTCHours(0, 0, 0, 0); // * 12am utc (2am spain rn)
+
+    if (now >= dailyResetTime) {
+        if (!lastDaily || lastDaily < dailyResetTime) {
+            const checklist = storage.get('checklist');
+            const tasks = storage.get('tasks');
+            const dailyTaskIds = tasks.filter(t => t.reset === 'daily').map(t => t.id);
+            
+            const updatedChecklist = checklist.map(row => {
+                if (dailyTaskIds.includes(row.task_id)) {
+                    return { ...row, completed: 0 };
+                }
+                return row;
+            });
+            storage.set('checklist', updatedChecklist);
+            
+            resetData.lastDailyReset = now.toISOString();
+            needsReset = true;
+            console.log('Daily tasks reset');
+        }
+    }
+
+    const day = now.getUTCDay();
+    const lastWeeklyReset = resetData.lastWeeklyReset ? new Date(resetData.lastWeeklyReset) : null;
+    const currentWednesday = new Date(now);
+    currentWednesday.setUTCHours(12, 0, 0, 0);
+    
+    const daysBackWednesday = (day - 3 + 7) % 7;
+    currentWednesday.setUTCDate(now.getUTCDate() - daysBackWednesday);
+
+    if (!lastWeeklyReset || lastWeeklyReset < currentWednesday) {
+        const checklist = storage.get('checklist');
+        const tasks = storage.get('tasks');
+        const weeklyTaskIds = tasks.filter(t => t.reset === 'weekly').map(t => t.id);
+        
+        const updatedChecklist = checklist.map(row => {
+            if (weeklyTaskIds.includes(row.task_id)) {
+                return { ...row, completed: 0 };
+            }
+            return row;
+        });
+        storage.set('checklist', updatedChecklist);
+
+        const challengeData = JSON.parse(localStorage.getItem('challengeData') || '{"characters":{}}');
+        for (const id in challengeData.characters) {
+            challengeData.characters[id].resetTicketUsed = 0;
+        }
+        localStorage.setItem('challengeData', JSON.stringify(challengeData));
+        
+        resetData.lastWeeklyReset = currentWednesday.toISOString();
+        needsReset = true;
+        console.log('✅ Weekly tasks reset');
+    }
+
+    if (needsReset) {
+        saveResetData(resetData);
+        console.log('✅ Reset data saved');
+        
+        // * browser notification
+        if (Notification.permission === 'granted') {
+            new Notification('ElsTracker', {
+                body: 'Your tasks have been reset!'
+            });
+        }
+    }
+
+    return { daily: !!resetData.lastDailyReset, weekly: !!resetData.lastWeeklyReset };
 };
 
 export const selectIcon = async () => null;
