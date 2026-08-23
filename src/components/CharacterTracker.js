@@ -66,7 +66,12 @@ export default function CharacterTracker({ characters, tasks, checklist, toggleT
                                     }
                                     return <td
                                         key={task.id}
-                                        onClick={() => toggleTask(c.id, task.id, row.completed)}
+                                        onClick={() => {
+                                            let type = 'none';
+                                            if (task.title === 'Serpentium') type = 'serpentium';
+                                            if (task.title === 'Doom Aporia') type = 'doom';
+                                            toggleTask(c.id, task.id, row.completed, type)}
+                                        }
                                         role='button'
                                     >
                                         {row?.completed ? <Check /> : <X />}

@@ -166,7 +166,7 @@ button.dropdown-toggle {
     background: $bg !important;
     color: $color !important;
     border: 1px solid transparent;
-    transition: ease-in-out 0.3 ease;
+    transition: ease-in-out 0.3;
 
     &:hover {
         background: $hover-bg;

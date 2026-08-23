@@ -150,7 +150,7 @@ export default function IndexPage() {
         setPityRefresh(prev => prev + 1);
     }
 
-    const toggleTask = async(characterId, taskId, currentStatus) => {
+    const toggleTask = async(characterId, taskId, currentStatus, type) => {
         const newStatus = currentStatus ? 0 : 1;
 
         const task = tasks.find(t => t.id === taskId);
@@ -162,9 +162,9 @@ export default function IndexPage() {
 
         if (isPityTask) {
             if (newStatus === 1) {
-                await db.addRun(characterId, taskId);
+                await db.addRun(characterId, taskId, type);
             } else {
-                await db.removeRun(characterId, taskId);
+                await db.removeRun(characterId, taskId, type);
             }
             refreshPity();
         }
