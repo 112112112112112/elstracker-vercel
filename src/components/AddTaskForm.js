@@ -22,7 +22,7 @@ export default function AddTaskForm({
         <table className='text-center box'>
             <tbody>
                 <tr>
-                    <td className='text-center align-middle'>
+                    {/* <td className='text-center align-middle'>
                         <Form.Control
                             // autoFocus
                             type="text"
@@ -46,7 +46,7 @@ export default function AddTaskForm({
                         >
                             Select file
                         </button>
-                    </td>
+                    </td> */}
                     <td className='text-center align-middle'>
                         <div className='d-flex flex-column align-items-center'>
                             <Form.Control
