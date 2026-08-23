@@ -9,6 +9,10 @@ function MyApp({ Component, pageProps }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
+    if (Notification.permission === 'default') {
+        Notification.requestPermission();
+    }
+
     const init = async () => {
       await db.initDB();
       console.log('db init done');

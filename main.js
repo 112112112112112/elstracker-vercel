@@ -94,12 +94,23 @@ function tasksReset() {
   if (needsReset) {
     saveReset(resetData);
 
+    // * browser notif
     if (resetData.lastDailyReset || resetData.lastWeeklyReset) {
-      new Notification({
-        title: 'ElsTracker',
-        body: 'Your tasks have been reset!',
-        icon: path.join(__dirname, 'build', 'icon.png')
-      }).show();
+      if (Notification.permission === 'granted') {
+        new Notification('ElsTracker', {
+          body: 'Your tasks have been reset!',
+          icon: '/icon.png'
+        }).show();
+      }
+    } else if (Notification.permission !== 'denied') {
+      Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        new Notification("ElsTracker", {
+          body: "Your tasks have been reset!",
+          icon: "/icon.png"
+        });
+      }
+    })
     }
   }
 }
