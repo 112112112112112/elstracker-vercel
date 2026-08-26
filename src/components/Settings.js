@@ -9,6 +9,42 @@ export default function Settings({ tasks, checklist, characters, toggleTaskEnabl
     const accTasks = tasks.filter(t => t.bound === 'account');
     const charTasks = tasks.filter(t => t.bound === 'character' && t.title !== 'Challenge Mode');
 
+    const handleExport = async () => {
+        try {
+            const data = await db.exportData();
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `elstracker-backup-${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            alert('Succesfully exported your data!');
+        } catch (error) {
+            alert('Error exporting your data: ' + error.message);
+        }
+    }
+
+    const handleImport = (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+            try {
+                const data = JSON.parse(e.target.result);
+
+                if (confirm('Are you sure you want to replace all your data?')) {
+                    await db.importData(data);
+                }
+            } catch (error) {
+                alert('Error importing your data: ' + error.message);
+            }
+        };
+        reader.readAsText(file);
+        event.target.value = '';
+    };
+
     return (
         <details className="mt-4">
             <summary className="h2" style={{ cursor: 'pointer' }}>
@@ -255,6 +291,25 @@ export default function Settings({ tasks, checklist, characters, toggleTaskEnabl
                         <option value="titles">Show Titles Only</option>
                         <option value="icons">Show Icons Only</option>
                     </Form.Select>
+                </div>
+            </details>
+            <details className="p-3 rounded mt-2">
+                <summary className="h4" style={{ cursor: 'pointer' }}>
+                Backup & Restore
+                </summary>
+                <div className="p-3 rounded mt-2 d-flex gap-3">
+                    <button className="btn button-confirm" onClick={handleExport}>
+                        📤 Export Data
+                    </button>
+                    <label className="btn button-confirm" style={{ cursor: 'pointer' }}>
+                        📥 Import Data
+                        <input 
+                            type="file" 
+                            accept=".json" 
+                            onChange={handleImport}
+                            style={{ display: 'none' }}
+                        />
+                    </label>
                 </div>
             </details>
         </details>

@@ -405,5 +405,45 @@ export const getIcon = async (taskId) => {
     return icons[taskId] || null;
 };
 
+export const exportData = async () => {
+    const keys = [
+        'tasks', 'characters', 'checklist', 'characterCounter', 'pity', 'challengeData', 'notes', 'taskIcons', 'resetData', 'selectedIcon'
+    ];
+    const data = {};
+    for (const key of keys) {
+        const value = localStorage.getItem(key);
+        if (value !== null) {
+                try {
+                    data[key] = JSON.parse(value);
+                } catch (e) {
+                    data[key] = value;
+                }
+            }
+    }
+    return data;
+}
+
+export const importData = async (data) => {
+    if (!data || typeof data !== 'object') throw new Error('Invalid data');
+    for (const [key, value] of Object.entries(data)) {
+        if (key === 'notes') {
+            if (typeof value === 'string') {
+                let cleanValue = value;
+                if (cleanValue.startsWith('"') && cleanValue.endsWith('"')) {
+                    cleanValue = cleanValue.slice(1, -1);
+                }
+                localStorage.setItem('notes', cleanValue);
+            } else {
+                localStorage.setItem('notes', String(value));
+            }
+        } else if (typeof value === 'string') {
+            localStorage.setItem(key, value);
+        } else {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
+    }
+    window.location.reload();
+};
+
 export const getIconPath = async () => null;
 export const sendDiscordMsg = async () => {};
