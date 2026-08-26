@@ -157,7 +157,6 @@ export default function IndexPage() {
         const isPityTask = task && (task.title === 'Serpentium' || task.title === 'Doom Aporia');
 
         await db.updateChecklist(characterId, taskId, newStatus);
-        console.log('Toggled:', { characterId, taskId, newStatus });
 
 
         if (isPityTask) {
@@ -303,5 +302,3 @@ export default function IndexPage() {
         </div>
     )
 }
-
-console.log('db exports:', Object.keys(db));

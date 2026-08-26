@@ -15,10 +15,8 @@ function MyApp({ Component, pageProps }) {
 
     const init = async () => {
       await db.initDB();
-      console.log('db init done');
       
       await db.resetTasks();
-      console.log('checked task reset');
       
       setReady(true);
     };

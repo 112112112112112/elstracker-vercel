@@ -9,7 +9,6 @@ export const initDB = async () => {
         const maxId = chars.reduce((max, c) => Math.max(max, c.id || 0), 0);
         const startFrom = Math.max(maxId + 1, 1);
         localStorage.setItem('characterCounter', JSON.stringify(startFrom));
-        console.log('✅ characterCounter initialized at:', startFrom);
     }
 
     let tasks = storage.get('tasks');
@@ -373,12 +372,11 @@ export const resetTasks = async () => {
         
         resetData.lastWeeklyReset = currentWednesday.toISOString();
         needsReset = true;
-        console.log('✅ Weekly tasks reset');
+        console.log('Weekly tasks reset');
     }
 
     if (needsReset) {
         saveResetData(resetData);
-        console.log('✅ Reset data saved');
         
         // * browser notification
         if (Notification.permission === 'granted') {

@@ -1,6 +1,4 @@
 import * as db from '@/services/db.js';
-console.log('db:', db);
-console.log('db.loadNotes:', db.loadNotes);
 import { useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 

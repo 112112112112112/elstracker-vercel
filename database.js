@@ -69,7 +69,6 @@ if (accountExists.count === 0) {
 
 try {
     require('./tasks.js');
-    console.log('Tasks seeded!');
 } catch (error) {
     console.error('Error seeding tasks :', error.message);
 

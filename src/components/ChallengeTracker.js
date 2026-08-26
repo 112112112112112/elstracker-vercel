@@ -6,13 +6,11 @@ export default function ChallengeTracker({characters, checklist, setChecklist, t
     const [challengeData, setChallengeData] = useState(null);
     const [currentWeek, setCurrentWeek] = useState('');
     const challengeTask = tasks.find(t => t.title === 'Challenge Mode');
-    console.log('🔍 Challenge Task:', challengeTask);
 
 
     useEffect(() => {
         async function load() {
             let challData = await db.getChallengeData();
-            console.log('chall data: ', challData);
             if (!challData || Object.keys(challData.characters).length === 0) {
                 challData = { characters: {} };
                 for (const c of characters) {
@@ -23,7 +21,6 @@ export default function ChallengeTracker({characters, checklist, setChecklist, t
                     };
                 }
                 localStorage.setItem('challengeData', JSON.stringify(challData));
-                console.log('SAVED CHALL DATA: ', challData);
             }
             
             setChallengeData(challData);
@@ -53,9 +50,6 @@ export default function ChallengeTracker({characters, checklist, setChecklist, t
                         const aura = currentWeek === 'Rosso' ? charData.rossoAura : charData.bertheAura;
                         const isCleared = checklist.some(cl => cl.character_id === c.id && cl.task_id === challengeTask?.id && cl.completed === 1);
 
-                        console.log('challengeTask:', challengeTask);
-                        console.log('isCleared:', isCleared);
-                        console.log('checklist:', checklist);
                         return (
                             <tr key={c.id} className='character-row' style={{ backgroundColor: `${c.color}33`, outline: `2px solid ${c.color}` }}>
                                 <td>
