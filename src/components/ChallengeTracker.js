@@ -47,7 +47,9 @@ export default function ChallengeTracker({characters, checklist, setChecklist, t
                     <tr>
                         <th colSpan={2}>Character</th>
                         <th><img src={`img/items/${dungeon.toLowerCase()}-aura.webp`} alt={`${dungeon} Aura`} /></th>
-                        <th><img src={`img/items/${dungeon.toLowerCase()}-reset.webp`} alt={`${dungeon} Reset Tickets`} /></th>
+                        {isActive && (
+                            <th><img src={`img/items/${dungeon.toLowerCase()}-reset.webp`} alt={`${dungeon} Reset Tickets`} /></th>
+                        )}
                         <th></th>
                     </tr>
                 </thead>
@@ -64,7 +66,9 @@ export default function ChallengeTracker({characters, checklist, setChecklist, t
                                 </td>
                                 <td>{c.name}</td>
                                 <td>{aura}</td>
-                                <td>{charData.resetTicketUsed}/2</td>
+                                {isActive && (
+                                    <td>{charData.resetTicketUsed}/2</td>
+                                )}
                                 <td>
                                     <div className="button-box d-flex justify-content-center">
                                         {isActive && !isCleared && (
