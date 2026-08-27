@@ -213,7 +213,7 @@ export default function ChallengeTracker({characters, checklist, setChecklist, t
                         size="sm"
                         onClick={() => setViewDungeon(null)}
                     >
-                        🔄 Current Week ({currentWeek})
+                        Current Week ({currentWeek})
                     </Button>
                 </div>
             </div>
