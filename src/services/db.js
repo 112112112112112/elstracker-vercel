@@ -77,18 +77,9 @@ export const getClasses = async () => {
 
 export const getCurrentWeek = async () => {
     const now = new Date();
-    const wednesdayReset = new Date(now);
-    const day = wednesdayReset.getUTCDay();
-    const diff = (day >= 3) ? day - 3 : day + 4;
-    wednesdayReset.setUTCDate(wednesdayReset.getUTCDate() - diff);
-    wednesdayReset.setUTCHours(12, 0, 0, 0);
-    const getWeekNumber = (date) => {
-        const firstDayYear = new Date(date.getFullYear(), 0, 1);
-        const pastDaysYear = (date - firstDayYear) / 86400000;
-        return Math.ceil((pastDaysYear + firstDayYear.getDay() + 1) / 7);
-    };
-    const currentWeek = now >= wednesdayReset ? getWeekNumber(now) : getWeekNumber(now) - 1;
-    return currentWeek % 2 === 1 ? 'Berthe' : 'Rosso';
+    const startDate = new Date('2026-07-01T00:00:00Z'); // * starting on July 1, it's Rosso week, then alternate Berthe->Rosso->Berthe etc... every reset
+    const weeksSinceStart = Math.floor((now - startDate) / (1000 * 60 * 60 * 24 * 7));
+    return weeksSinceStart % 2 === 0 ? 'Rosso' : 'Berthe';
 };
 
 export const getChallengeData = async () => {
