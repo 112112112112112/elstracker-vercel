@@ -213,6 +213,11 @@ button.btn-outline-light {
     @include btn-yeah();
 }
 
+button.btn-outline-active {
+    @include btn-yeah();
+    background: var(--accent);
+}
+
 .dropdown-item {
     color: #FFFFFF !important;
     &:hover {
