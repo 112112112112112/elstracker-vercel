@@ -434,5 +434,56 @@ export const importData = async (data) => {
     window.location.reload();
 };
 
+const getFragmentData = () => {
+    return JSON.parse(localStorage.getItem('fragmentData') || '{"characters":{}}');
+};
+
+const saveFragmentData = (data) => {
+    localStorage.setItem('fragmentData', JSON.stringify(data));
+};
+
+export const updateFragments = async (characterId, fragmentType, amount) => {
+    const data = getFragmentData();
+    
+    if (!data.characters[characterId]) {
+        data.characters[characterId] = { atma: 0, henir: 0 };
+    }
+    
+    const key = fragmentType === 'atma' ? 'atma' : 'henir';
+    data.characters[characterId][key] = Math.max(0, (data.characters[characterId][key] || 0) + amount);
+    
+    saveFragmentData(data);
+    return data.characters[characterId];
+};
+
+export const setFragments = async (characterId, fragmentType, amount) => {
+    const data = getFragmentData();
+    
+    if (!data.characters[characterId]) {
+        data.characters[characterId] = { atma: 0, henir: 0 };
+    }
+    
+    const key = fragmentType === 'atma' ? 'atma' : 'henir';
+    data.characters[characterId][key] = Math.max(0, amount);
+    
+    saveFragmentData(data);
+    return data.characters[characterId];
+};
+
+export const resetFragments = async (characterId, fragmentType) => {
+    return setFragments(characterId, fragmentType, 0);
+};
+
+export const getFragments = async (characterId, fragmentType) => {
+    const data = getFragmentData();
+    const charData = data.characters[characterId] || { atma: 0, henir: 0 };
+    return fragmentType === 'atma' ? charData.atma : charData.henir;
+};
+
+export const getAllFragments = async () => {
+    return getFragmentData();
+};
+
+
 export const getIconPath = async () => null;
 export const sendDiscordMsg = async () => {};

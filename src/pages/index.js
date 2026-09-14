@@ -11,6 +11,7 @@ import CharacterTracker from '../components/CharacterTracker';
 import Clock from '../components/Clock';
 import PityTracker from '../components/PityTracker';
 import Settings from '../components/Settings';
+import FragmentTracker from '@/components/FragmentTracker';
 import { CardChecklist, Gear, GearFill, ListCheck, ListStars, PatchPlus } from 'react-bootstrap-icons';
 
 export default function IndexPage() {
@@ -235,6 +236,13 @@ export default function IndexPage() {
                             checklist={checklist}
                             setChecklist={setChecklist}
                             tasks={tasks}
+                        />
+                    </Col>
+                </Row>
+                <Row className='my-5'>
+                    <Col>
+                        <FragmentTracker
+                            characters={characters}
                         />
                     </Col>
                 </Row>
