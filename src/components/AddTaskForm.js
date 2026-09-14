@@ -22,35 +22,9 @@ export default function AddTaskForm({
         <table className='text-center box'>
             <tbody>
                 <tr>
-                    {/* <td className='text-center align-middle'>
-                        <Form.Control
-                            // autoFocus
-                            type="text"
-                            placeholder={'Icon filename'}
-                            value={newIcon}
-                            onChange={(e) => setNewIcon(e.target.value)}
-                        />
-                    </td>
-                    <td className='text-center align-middle'>
-                        <input
-                            type="file"
-                            ref={fileInputRef}
-                            onChange={handleFileSelect}
-                            style={{display: 'none'}}
-                            accept="image/*"
-                        />
-                        <button
-                            className="button-confirm"
-                            size="sm"
-                            onClick={handleButtonClick}
-                        >
-                            Select file
-                        </button>
-                    </td> */}
                     <td className='text-center align-middle'>
                         <div className='d-flex flex-column align-items-center'>
                             <Form.Control
-                                // autoFocus
                                 type="text"
                                 placeholder={'Task title'}
                                 minLength={1}
@@ -63,7 +37,6 @@ export default function AddTaskForm({
                     <td className='text-center align-middle'>
                         <div className='d-flex justify-content-center'>
                             <Form.Select
-                                // autoFocus
                                 value={newReset}
                                 onChange={(e) => setNewReset(e.target.value)}
                             >
@@ -75,7 +48,6 @@ export default function AddTaskForm({
                     <td className='text-center align-middle'>
                         <div className='d-flex justify-content-center'>
                             <Form.Select
-                                // autoFocus
                                 value={newBound}
                                 onChange={(e) => setNewBound(e.target.value)}
                             >
